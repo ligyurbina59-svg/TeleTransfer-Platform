@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#071426">
+<title>MN24 Gamepad World Markets</title>
+<style>
+:root{--bg:#071426;--p:#0d2037;--line:#244565;--c:#54c7ff;--g:#65e6b0;--t:#eef5ff;--m:#a9bfd7;--w:#ffce70;--r:#f87171;--or:#fb923c}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:radial-gradient(circle at 50% 0,#17365c,#071426 55%);color:var(--t);font:12px/1.4 system-ui,sans-serif;overflow:hidden}
+.app{display:flex;flex-direction:column;height:100%;max-width:480px;margin:0 auto}
+.hdr{height:56px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:#071426ee}
+.brand{font-weight:900;letter-spacing:1px;font-size:13px}.brand span{color:var(--c)}
+.status{font-size:10px;color:var(--w)}.status.on{color:var(--g)}
+.tabs{display:flex;gap:2px;overflow-x:auto;padding:6px;border-bottom:1px solid var(--line)}
+.tabs button{flex:0 0 auto;padding:7px 10px;border-radius:11px;border:1px solid var(--line);background:var(--p);color:var(--t);font-size:10px;font-weight:600}
+.tabs button.on{border-color:var(--c);color:var(--c);background:#0a2a45}
+main{flex:1;overflow-y:auto;padding:10px;-webkit-overflow-scrolling:touch}
+.panel{background:var(--p);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 8px 28px #0003}
+h1,h2{margin:0 0 6px;font-size:14px}h2{color:var(--c);font-size:13px}
+.muted,.hint{color:var(--m);font-size:10px;line-height:1.4}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.card{background:#061323;border:1px solid var(--line);border-radius:12px;padding:12px 8px;text-align:center;cursor:pointer}
+.card:active{border-color:var(--c);transform:scale(.98)}
+.card strong{display:block;font-size:11px}.card .sub{font-size:9px;color:var(--m);margin-top:3px}
+input,textarea,button.btn,select{width:100%;padding:11px;border-radius:10px;border:1px solid #315575;background:#061323;color:var(--t);margin:4px 0;font:inherit}
+button.btn{background:linear-gradient(135deg,#087fbd,#54c7ff);color:#031016;font-weight:800;border:none}
+button.btn.sec{background:#153454;color:var(--t);border:1px solid var(--line);font-weight:600}
+.item{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #1a3550;font-size:11px}
+.item:last-child{border-bottom:0}
+.tag{font-size:8px;padding:2px 7px;border-radius:6px;border:1px solid var(--line);color:var(--m);white-space:nowrap}
+.tag.ok{border-color:var(--g);color:var(--g)}.tag.sim{border-color:var(--w);color:var(--w)}
+.tag.api{border-color:#a78bfa;color:#a78bfa}.tag.pend{opacity:.75}
+.controller-top{display:flex;justify-content:space-between;color:var(--c);font-size:11px;letter-spacing:1px;margin-bottom:8px}
+.controls{display:flex;justify-content:space-around;align-items:center;padding:12px 0;gap:10px}
+.dpad,.face{display:flex;flex-direction:column;align-items:center;gap:6px}
+.pad-btn{width:52px;height:44px;border-radius:10px;border:1px solid #376187;background:#153454;color:var(--t);font-weight:800;font-size:14px;touch-action:none}
+.pad-btn:active,.pad-btn.pressed{background:#087fbd}
+.face .pad-btn{width:50px;height:50px;border-radius:50%}
+.face .y{background:#78631c}.face .x{background:#245b9b}.face .b{background:#9a343b}.face .a{background:#2d7a3a}
+.row3{display:flex;gap:6px}
+.utility{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.utility button{flex:1 1 22%;min-width:64px;padding:10px 6px;border-radius:10px;border:1px solid #376187;background:#153454;color:var(--t);font-size:10px;font-weight:700}
+.stop{width:100%;padding:12px;margin-top:6px;border-radius:12px;border:1px solid #7f1d1d;background:#450a0a;color:#fecaca;font-weight:800}
+.remote-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.remote-grid button{padding:12px;border-radius:11px;border:1px solid #376187;background:#153454;color:var(--t);font-weight:700;font-size:11px}
+.biz{border:1px solid var(--line);border-radius:12px;padding:10px;margin:6px 0;background:#061323}
+.biz strong{display:block;font-size:12px}.biz .meta{font-size:9px;color:var(--m);margin-top:2px}
+.biz .row{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.chip{font-size:9px;padding:3px 8px;border-radius:999px;border:1px solid #1e40af;color:#93c5fd}
+.log{font-family:ui-monospace,monospace;font-size:9px;background:#061323;border:1px solid var(--line);border-radius:8px;padding:8px;max-height:90px;overflow:auto;white-space:pre-wrap;color:#94a3b8}
+.cont{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0}
+.cont span{padding:3px 8px;border-radius:999px;border:1px solid #1e40af;font-size:9px;color:#93c5fd}
+footer{font-size:8px;text-align:center;color:var(--m);padding:4px;border-top:1px solid var(--line)}
+label{display:block;font-size:10px;color:var(--m);margin-top:4px}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="hdr">
+    <div class="brand">MN24 <span>WORLD</span></div>
+    <div id="connection" class="status">Offline / local</div>
+  </header>
+  <div class="tabs" id="tabs">
+    <button class="on" data-v="home">Home</button>
+    <button data-v="pad">Gamepad</button>
+    <button data-v="remote">Remote</button>
+    <button data-v="biz">Business</button>
+    <button data-v="maps">Maps</button>
+    <button data-v="guide">City</button>
+    <button data-v="ads">Classified</button>
+    <button data-v="publish">Publish</button>
+    <button data-v="api">API</button>
+    <button data-v="status">Estado</button>
+  </div>
+  <main id="main"></main>
+  <footer>MN24 Gamepad + Business Directory · world markets UI</footer>
+</div>
+<script>
+const KEY='mn24_gamepad_world_v1';
+const ST={
+  v:'home', apiBase:'http://127.0.0.1:8080', token:'', connected:false,
+  lastAction:'READY', log:[],
+  city:'San José', market:'América',
+  query:'', ads:[], posts:[]
+};
+const MARKETS=['América','Europa','África','Asia','Oceanía','Medio Oriente'];
+const CITIES={
+  'América':['San José','Ciudad de México','São Paulo','New York','Buenos Aires'],
+  'Europa':['Madrid','Berlin','Paris','Tallinn','London'],
+  'África':['Lagos','Nairobi','Cairo','Cape Town'],
+  'Asia':['Tokyo','Seoul','Mumbai','Singapore','Dubai'],
+  'Oceanía':['Sydney','Auckland'],
+  'Medio Oriente':['Dubai','Muscat','Riyadh']
+};
+const SAMPLE_BIZ=[
+  {name:'Café Central', cat:'Restaurante', city:'San José', rating:'4.6', open:true},
+  {name:'Taller Norte', cat:'Automotriz', city:'San José', rating:'4.2', open:true},
+  {name:'Clínica Sur', cat:'Salud', city:'San José', rating:'4.8', open:false},
+  {name:'Market 24', cat:'Comercio', city:'Ciudad de México', rating:'4.4', open:true},
+  {name:'Tech Hub Berlin', cat:'Servicios', city:'Berlin', rating:'4.7', open:true},
+  {name:'Lagos Food Court', cat:'Restaurante', city:'Lagos', rating:'4.3', open:true}
+];
+
+function load(){
+  try{const s=JSON.parse(localStorage.getItem(KEY)||'{}');Object.assign(ST,s);}catch(e){}
+  if(!ST.ads||!ST.ads.length){
+    ST.ads=[
+      {title:'Sedán 2018', price:'$6,500', cat:'Autos', city:ST.city},
+      {title:'Apartamento 2H', price:'$420/mes', cat:'Vivienda', city:ST.city},
+      {title:'Laptop usada', price:'$280', cat:'Electrónica', city:ST.city}
+    ];
+  }
+  if(!ST.posts)ST.posts=[];
+}
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify({
+    apiBase:ST.apiBase, token:ST.token, city:ST.city, market:ST.market,
+    ads:ST.ads.slice(-30), posts:ST.posts.slice(-40)
+  }));}catch(e){}
+}
+load();
+
+const $=id=>document.getElementById(id);
+const el=(t,c,x)=>{const n=document.createElement(t);if(c)n.className=c;if(x!=null)n.textContent=x;return n};
+const now=()=>new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+const log=m=>{ST.log.push(now()+' · '+m);if(ST.log.length>40)ST.log.shift()};
+
+function setConn(on,msg){
+  ST.connected=!!on;
+  const c=$('connection');
+  if(c){c.textContent=msg||(on?'Conectado':'Offline / local');c.classList.toggle('on',!!on);}
+}
+
+async function sendCommand(type, control, value){
+  ST.lastAction=(type+':'+control).toUpperCase();
+  log(ST.lastAction+' = '+value);
+  const la=$('lastAction'); if(la)la.textContent=ST.lastAction;
+  if(!ST.token){return {local:true};}
+  try{
+    const r=await fetch(ST.apiBase.replace(/\/$/,'')+'/api/v1/commands',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+ST.token},
+      body:JSON.stringify({commands:[{type,control,value,source:'virtual'}]})
+    });
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    setConn(true,'API OK');
+    return await r.json();
+  }catch(e){
+    setConn(false,'API error · local only');
+    log('API: '+e.message);
+    return {error:String(e.message)};
+  }
+}
+
+function bindPad(root){
+  root.querySelectorAll('[data-type]').forEach(b=>{
+    const down=ev=>{ev.preventDefault();b.classList.add('pressed');sendCommand(b.dataset.type,b.dataset.control,true)};
+    const up=ev=>{ev.preventDefault();b.classList.remove('pressed');sendCommand(b.dataset.type,b.dataset.control,false)};
+    ['touchstart','mousedown'].forEach(e=>b.addEventListener(e,down));
+    ['touchend','mouseup','mouseleave'].forEach(e=>b.addEventListener(e,up));
+  });
+}
+
+function render(){
+  [...$('tabs').children].forEach(b=>b.classList.toggle('on',b.dataset.v===ST.v));
+  const m=$('main'); m.innerHTML='';
+  const panel=()=>{const p=el('div','panel');m.appendChild(p);return p};
+
+  if(ST.v==='home'){
+    const p=panel();
+    p.appendChild(el('h1',null,'MN24 Gamepad + World Markets'));
+    p.appendChild(el('p','muted','Control virtual + directorio de negocios por continente/ciudad. Receptor PC/TV y mapas reales = backend / APIs.'));
+    const cont=el('div','cont');
+    MARKETS.forEach(x=>{const s=document.createElement('span');s.textContent=x;cont.appendChild(s)});
+    p.appendChild(cont);
+    const g=el('div','grid');
+    [['Gamepad','pad'],['Digital Remote','remote'],['Business Directory','biz'],['Maps & Directions','maps'],['City Guide','guide'],['Classified Ads','ads'],['Digital Publishing','publish'],['API / Pairing','api']].forEach(([n,v])=>{
+      const c=el('div','card'); c.innerHTML='<strong>'+n+'</strong><div class="sub">abrir</div>';
+      c.onclick=()=>{ST.v=v;render()}; g.appendChild(c);
+    });
+    p.appendChild(g);
+  }
+
+  else if(ST.v==='pad'){
+    const p=panel();
+    p.innerHTML='<div class="controller-top"><span>VIRTUAL CONTROLLER</span><span id="lastAction">'+ST.lastAction+'</span></div>';
+    const controls=el('div','controls');
+    const dpad=el('div','dpad');
+    dpad.innerHTML='<button class="pad-btn" data-type="dpad" data-control="up">▲</button><div class="row3"><button class="pad-btn" data-type="dpad" data-control="left">◀</button><button class="pad-btn" data-type="dpad" data-control="center">●</button><button class="pad-btn" data-type="dpad" data-control="right">▶</button></div><button class="pad-btn" data-type="dpad" data-control="down">▼</button>';
+    const face=el('div','face');
+    face.innerHTML='<button class="pad-btn y" data-type="button" data-control="Y">Y</button><div class="row3"><button class="pad-btn x" data-type="button" data-control="X">X</button><button class="pad-btn b" data-type="button" data-control="B">B</button></div><button class="pad-btn a" data-type="button" data-control="A">A</button>';
+    controls.appendChild(dpad); controls.appendChild(face); p.appendChild(controls);
+    const util=el('div','utility');
+    ['SELECT','START','HOME','PAUSE','LB','RB','LT','RT'].forEach(c=>{
+      const b=document.createElement('button'); b.dataset.type='button'; b.dataset.control=c; b.textContent=c; util.appendChild(b);
+    });
+    p.appendChild(util);
+    const stop=el('button','stop','DETENER / SOLTAR');
+    stop.onclick=()=>sendCommand('stop','ALL',true);
+    p.appendChild(stop);
+    p.appendChild(el('p','hint','Eventos normalizados. Control real de PC/TV/consola requiere receptor autorizado en el destino.'));
+    bindPad(p);
+  }
+
+  else if(ST.v==='remote'){
+    const p=panel();
+    p.appendChild(el('h2',null,'Digital Remote'));
+    const g=el('div','remote-grid');
+    const keys=[['navigation','back','↶ Atrás'],['navigation','home','⌂ Inicio'],['navigation','up','↑'],['navigation','down','↓'],['navigation','left','←'],['navigation','right','→'],['navigation','ok','OK / Enter'],['media','play_pause','▶Ⅱ'],['media','volume_down','Vol −'],['media','volume_up','Vol +'],['media','mute','Mute'],['media','stop','Stop']];
+    keys.forEach(([t,c,lab])=>{
+      const b=document.createElement('button'); b.dataset.type=t; b.dataset.control=c; b.textContent=lab; g.appendChild(b);
+    });
+    p.appendChild(g);
+    p.appendChild(el('p','hint','Mismo bus de comandos que el gamepad.'));
+    bindPad(p);
+  }
+
+  else if(ST.v==='biz'){
+    const p=panel();
+    p.appendChild(el('h2',null,'Business Directory'));
+    p.appendChild(el('p','muted','Directorio digital local por mercado y ciudad (demo offline).'));
+    const msel=document.createElement('select');
+    MARKETS.forEach(x=>{const o=document.createElement('option');o.value=x;o.textContent=x;if(x===ST.market)o.selected=true;msel.appendChild(o);});
+    msel.onchange=()=>{ST.market=msel.value;const list=CITIES[ST.market]||[];ST.city=list[0]||ST.city;save();render()};
+    const csel=document.createElement('select');
+    (CITIES[ST.market]||[]).forEach(x=>{const o=document.createElement('option');o.value=x;o.textContent=x;if(x===ST.city)o.selected=true;csel.appendChild(o);});
+    csel.onchange=()=>{ST.city=csel.value;save();render()};
+    const q=document.createElement('input'); q.placeholder='Buscar negocio…'; q.value=ST.query||'';
+    q.oninput=()=>{ST.query=q.value;renderList()};
+    p.appendChild(el('label',null,'Mercado / continente')); p.appendChild(msel);
+    p.appendChild(el('label',null,'Ciudad')); p.appendChild(csel);
+    p.appendChild(el('label',null,'Local Search')); p.appendChild(q);
+    const list=el('div',''); list.id='bizList'; p.appendChild(list);
+    function renderList(){
+      list.innerHTML='';
+      const qq=(ST.query||'').toLowerCase();
+      SAMPLE_BIZ.filter(b=>{
+        const inCity=b.city===ST.city || !ST.city;
+        const match=!qq || b.name.toLowerCase().includes(qq) || b.cat.toLowerCase().includes(qq);
+        return match;
+      }).forEach(b=>{
+        const d=el('div','biz');
+        d.innerHTML='<strong></strong><div class="meta"></div><div class="row"></div>';
+        d.children[0].textContent=b.name;
+        d.children[1].textContent=b.cat+' · '+b.city+' · ★ '+b.rating;
+        const open=document.createElement('span'); open.className='chip'; open.textContent=b.open?'Abierto':'Cerrado';
+        const dir=document.createElement('span'); dir.className='chip'; dir.textContent='Directions';
+        dir.onclick=()=>{ST.v='maps';render()};
+        d.children[2].appendChild(open); d.children[2].appendChild(dir);
+        list.appendChild(d);
+      });
+      if(!list.children.length)list.appendChild(el('p','muted','Sin resultados en demo local. Conecta API de negocios para datos reales.'));
+    }
+    renderList();
+  }
+
+  else if(ST.v==='maps'){
+    const p=panel();
+    p.appendChild(el('h2',null,'Maps & Directions'));
+    p.appendChild(el('p','muted','Placeholder de mapa. Integración real: Mapbox/Google/OSM + API key + consentimiento GPS.'));
+    const box=el('div','biz');
+    box.style.minHeight='140px'; box.style.display='flex'; box.style.alignItems='center'; box.style.justifyContent='center';
+    box.innerHTML='<div style="text-align:center"><strong>Mapa · '+ST.city+'</strong><div class="meta">Vista satélite / calles · pendiente proveedor</div></div>';
+    p.appendChild(box);
+    const from=document.createElement('input'); from.placeholder='Desde (dirección)';
+    const to=document.createElement('input'); to.placeholder='Hasta (negocio o dirección)'; to.value='Café Central, '+ST.city;
+    const btn=el('button','btn','Calcular ruta (demo)');
+    const out=el('p','muted');
+    btn.onclick=()=>{out.textContent='Ruta demo: '+ (from.value||'Tu ubicación') +' → '+(to.value||'destino')+' · ~12 min · 3.4 km (simulado)';};
+    p.appendChild(from); p.appendChild(to); p.appendChild(btn); p.appendChild(out);
+    p.appendChild(el('span','tag api','API mapas'));
+  }
+
+  else if(ST.v==='guide'){
+    const p=panel();
+    p.appendChild(el('h2',null,'City Guide · '+ST.city));
+    ['Restaurantes','Entretenimiento','Salud','Servicios','Hoteles'].forEach(cat=>{
+      const d=el('div','biz');
+      d.innerHTML='<strong></strong><div class="meta">Guía local demo</div>';
+      d.children[0].textContent=cat;
+      d.onclick=()=>{ST.query=cat;ST.v='biz';render()};
+      p.appendChild(d);
+    });
+  }
+
+  else if(ST.v==='ads'){
+    const p=panel();
+    p.appendChild(el('h2',null,'Classified Ads'));
+    p.appendChild(el('p','muted','Anuncios locales (autos, vivienda, productos). Offline demo.'));
+    ST.ads.forEach(a=>{
+      const d=el('div','biz');
+      d.innerHTML='<strong></strong><div class="meta"></div>';
+      d.children[0].textContent=a.title+' · '+a.price;
+      d.children[1].textContent=a.cat+' · '+a.city;
+      p.appendChild(d);
+    });
+    const t=document.createElement('input'); t.placeholder='Título del anuncio';
+    const pr=document.createElement('input'); pr.placeholder='Precio';
+    const btn=el('button','btn','Publicar anuncio local');
+    btn.onclick=()=>{
+      if(!t.value.trim())return;
+      ST.ads.unshift({title:t.value.trim(), price:pr.value.trim()||'—', cat:'General', city:ST.city});
+      save(); t.value=''; pr.value=''; render();
+    };
+    p.appendChild(t); p.appendChild(pr); p.appendChild(btn);
+  }
+
+  else if(ST.v==='publish'){
+    const p=panel();
+    p.appendChild(el('h2',null,'Digital Publishing'));
+    p.appendChild(el('p','muted','Herramienta simple para notas / contenido local tipo periódico.'));
+    const ta=document.createElement('textarea'); ta.rows=5; ta.placeholder='Escribe una nota o artículo…';
+    const btn=el('button','btn','Guardar publicación local');
+    const list=el('div','');
+    function paint(){
+      list.innerHTML='';
+      (ST.posts||[]).slice().reverse().forEach(x=>{
+        const d=el('div','biz');
+        d.innerHTML='<strong></strong><div class="meta"></div>';
+        d.children[0].textContent=x.title||'Nota';
+        d.children[1].textContent=(x.when||'')+' · '+String(x.body||'').slice(0,80);
+        list.appendChild(d);
+      });
+    }
+    btn.onclick=()=>{
+      const body=ta.value.trim(); if(!body)return;
+      ST.posts.push({title:body.slice(0,40), body, when:now()});
+      save(); ta.value=''; paint();
+    };
+    p.appendChild(ta); p.appendChild(btn); p.appendChild(list); paint();
+  }
+
+  else if(ST.v==='api'){
+    const p=panel();
+    p.appendChild(el('h2',null,'API / Pairing'));
+    p.appendChild(el('p','muted','Backend FastAPI del paquete GAMEPAD_DIGITAL_REMOTE. Token solo en esta sesión.'));
+    const api=document.createElement('input'); api.value=ST.apiBase; api.placeholder='http://127.0.0.1:8080';
+    const tok=document.createElement('input'); tok.type='password'; tok.value=ST.token||''; tok.placeholder='Bearer token';
+    const health=el('button','btn sec','GET /health');
+    const saveBtn=el('button','btn','Guardar y probar');
+    const out=el('div','log');
+    health.onclick=async()=>{
+      ST.apiBase=api.value.trim();
+      try{
+        const r=await fetch(ST.apiBase.replace(/\/$/,'')+'/health');
+        out.textContent=JSON.stringify(await r.json(),null,2);
+        setConn(r.ok,r.ok?'API reachable':'HTTP '+r.status);
+      }catch(e){out.textContent=String(e.message);setConn(false,'API offline');}
+    };
+    saveBtn.onclick=()=>{ST.apiBase=api.value.trim();ST.token=tok.value.trim();save();setConn(!!ST.token,ST.token?'Token listo':'Sin token');out.textContent='Guardado local.';};
+    p.appendChild(el('label',null,'API base')); p.appendChild(api);
+    p.appendChild(el('label',null,'Device token')); p.appendChild(tok);
+    p.appendChild(health); p.appendChild(saveBtn); p.appendChild(out);
+    p.appendChild(el('div','log')).textContent='Pairing:\nPOST /api/v1/pairing/code (X-Admin-Key)\nPOST /api/v1/pairing/redeem\nPOST /api/v1/commands (Bearer)';
+  }
+
+  else if(ST.v==='status'){
+    const p=panel();
+    p.appendChild(el('h2',null,'Estado honesto'));
+    [
+      ['Gamepad + Remote UI','ok'],
+      ['Bus de comandos local / API','ok'],
+      ['Business Directory demo','ok'],
+      ['Classified + Publishing local','ok'],
+      ['City guide filtros','ok'],
+      ['Maps provider real','api'],
+      ['Receptor PC/TV/consola','pend'],
+      ['Android USB/BT HID nativo','pend'],
+      ['LinkedIn OAuth','api'],
+      ['Producción world-scale','pend']
+    ].forEach(([a,k])=>{
+      const i=el('div','item'); i.appendChild(el('strong',null,a));
+      i.appendChild(el('span','tag '+k,k)); p.appendChild(i);
+    });
+    p.appendChild(el('div','log')).textContent=ST.log.slice(-12).join('\n')||'Sin eventos de mando';
+  }
+}
+
+$('tabs').onclick=e=>{const b=e.target.closest('[data-v]');if(!b)return;ST.v=b.dataset.v;render()};
+render();
+</script>
+</body>
+</html>

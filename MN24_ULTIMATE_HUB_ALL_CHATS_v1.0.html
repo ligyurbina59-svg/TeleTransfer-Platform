@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#020617">
+<title>MN24 Ultimate Hub</title>
+<style>
+:root{--bg:#020617;--p:#0f172a;--line:#1e293b;--g:#34d399;--c:#38bdf8;--t:#e2e8f0;--m:#64748b;--w:#fbbf24;--r:#f87171;--or:#fb923c;--pu:#a78bfa}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--t);font:12px/1.4 system-ui,sans-serif;overflow:hidden}
+.app{display:flex;flex-direction:column;height:100%;max-width:480px;margin:0 auto}
+.hdr{padding:10px 12px;background:linear-gradient(165deg,#1e3a8a,#020617 75%);border-bottom:1px solid var(--line)}
+.logo{font-weight:800;font-size:14px}.logo span{color:var(--g)}.logo em{color:var(--c);font-style:normal}
+.logo small{display:block;font-size:9px;color:var(--m);font-weight:500}
+.warn{font-size:9px;color:#fde68a;background:#1c1408;border:1px solid #a16207;border-radius:8px;padding:6px;margin-top:8px;line-height:1.35}
+.tabs{display:flex;gap:2px;overflow-x:auto;padding:5px 6px;border-bottom:1px solid var(--line)}
+.tabs button{flex:0 0 auto;padding:7px 9px;border-radius:11px;border:1px solid var(--line);background:var(--p);color:var(--t);font-size:10px}
+.tabs button.on{border-color:var(--g);color:var(--g);background:#052e16}
+main{flex:1;overflow-y:auto;padding:8px 10px 12px}
+.panel{background:var(--p);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:8px}
+h2{margin:0 0 6px;font-size:13px;color:var(--c)}
+.muted{color:var(--m);font-size:10px;line-height:1.4}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.card{background:#020617;border:1px solid var(--line);border-radius:10px;padding:11px 8px;text-align:center;cursor:pointer}
+.card:active{border-color:var(--g)}
+.card strong{display:block;font-size:11px}
+.card .sub{font-size:9px;color:var(--m);margin-top:3px}
+.item{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line);font-size:11px}
+.item:last-child{border-bottom:0}
+.tag{font-size:8px;padding:2px 7px;border-radius:6px;border:1px solid var(--line);color:var(--m)}
+.tag.ok{border-color:var(--g);color:var(--g)}.tag.sim{border-color:var(--w);color:var(--w)}
+.tag.api{border-color:var(--pu);color:var(--pu)}.tag.norf{border-color:var(--r);color:var(--r)}
+.feed,.chat{max-height:160px;overflow-y:auto;background:#020617;border:1px solid var(--line);border-radius:10px;padding:8px;margin:6px 0}
+.post{border-bottom:1px solid var(--line);padding:6px 0;font-size:11px}
+.msg{padding:6px 9px;margin:3px 0;border-radius:10px;background:#1e293b;font-size:11px;max-width:88%}
+.msg.me{background:#1e3a8a;margin-left:auto}
+.row{display:flex;gap:4px}
+input,textarea,button.btn{width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:#020617;color:var(--t);margin:3px 0;font:inherit}
+button.btn{background:linear-gradient(135deg,#34d399,#3b82f6);color:#031016;font-weight:700;border:none}
+button.btn.sec{background:#1e293b;color:var(--t);border:1px solid var(--line);font-weight:600}
+.cam{width:56px;height:56px;border-radius:50%;border:3px solid var(--or);background:#1c1008;color:var(--or);font-size:20px;display:flex;align-items:center;justify-content:center;margin:8px auto}
+.ptt{width:72px;height:72px;border-radius:50%;border:3px solid var(--line);background:#0f172a;color:var(--t);font-weight:800;display:block;margin:8px auto}
+.ptt.on{border-color:var(--r);background:#450a0a;color:#fecaca}
+.ch{display:flex;gap:4px;flex-wrap:wrap;margin:6px 0}
+.ch button{padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:#020617;color:var(--t);font-size:10px}
+.ch button.on{border-color:var(--g);color:var(--g)}
+audio,video{width:100%;margin:6px 0;border-radius:8px;background:#000}
+.log{font-family:ui-monospace,monospace;font-size:9px;background:#020617;border:1px solid var(--line);border-radius:8px;padding:8px;max-height:100px;overflow:auto;white-space:pre-wrap;color:#94a3b8}
+.metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;text-align:center;margin:8px 0}
+.metrics div{background:#020617;border:1px solid var(--line);border-radius:10px;padding:8px}
+.metrics strong{display:block;color:var(--g)}
+footer{font-size:8px;text-align:center;color:var(--m);padding:4px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hdr">
+    <div class="logo"><span>MN24</span> <em>ULTIMATE HUB</em>
+      <small>Social · Media · Stream · Devices · Mensajes · IA</small>
+    </div>
+    <div class="warn">Todo lo local de los chats en un APK. Social/OAuth y RF (Midland/DEP) no salen del teléfono: UI, checklist y archivos locales. Streaming = URL o archivo.</div>
+  </div>
+  <div class="tabs" id="tabs">
+    <button class="on" data-v="home">CORE</button>
+    <button data-v="dev">Devices</button>
+    <button data-v="social">Social</button>
+    <button data-v="msg">💬</button>
+    <button data-v="media">🎵</button>
+    <button data-v="stream">▶</button>
+    <button data-v="wear">⌚</button>
+    <button data-v="cam">📷</button>
+    <button data-v="radio">📻</button>
+    <button data-v="bt">BT</button>
+    <button data-v="wifi">Wi‑Fi</button>
+    <button data-v="ai">IA</button>
+    <button data-v="notes">Notes</button>
+    <button data-v="status">Estado</button>
+  </div>
+  <main id="main"></main>
+  <footer>MN24 Ultimate · sideload hub</footer>
+</div>
+<script>
+const KEY='mn24_ultimate_v1';
+const ST={v:'home',ch:'CH-1',posts:[],msgs:[],notes:'',paired:[],btLog:[],midCh:8,midCtcss:37};
+function load(){try{Object.assign(ST,JSON.parse(localStorage.getItem(KEY)||'{}'));}catch(e){}
+  if(!ST.posts||!ST.posts.length)ST.posts=[{who:'MN24',when:'sys',body:'Ultimate hub: media, chat, devices, stream local.'}];
+  if(!ST.msgs)ST.msgs=[]; if(!ST.paired)ST.paired=[]; if(!ST.btLog)ST.btLog=[];
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({posts:ST.posts.slice(-40),msgs:ST.msgs.slice(-80),notes:String(ST.notes||'').slice(0,6000),paired:ST.paired,ch:ST.ch,midCh:ST.midCh,midCtcss:ST.midCtcss}));}catch(e){}}
+load();
+const $=id=>document.getElementById(id);
+const el=(t,c,x)=>{const n=document.createElement(t);if(c)n.className=c;if(x!=null)n.textContent=x;return n};
+const now=()=>new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+const SOCIAL=[['WhatsApp','API'],['Instagram','API'],['Facebook','API'],['Discord','API'],['TikTok','API'],['Reddit','API']];
+const DEVS=[
+  {id:'watch',n:'Smartwatch',s:'UI + cámara remota'},
+  {id:'tapo',n:'Tapo',s:'Sensor + cámara Wi‑Fi'},
+  {id:'midland',n:'Midland X-TALKER',s:'CH8 · CTCSS 37'},
+  {id:'dep',n:'DEP 450',s:'PTT demo'},
+  {id:'car',n:'Car',s:'BT / Wi‑Fi / USB'}
+];
+
+function render(){
+  [...$('tabs').children].forEach(b=>b.classList.toggle('on',b.dataset.v===ST.v));
+  const m=$('main'); m.innerHTML='';
+  const p=()=>{const x=el('div','panel');m.appendChild(x);return x};
+
+  if(ST.v==='home'){
+    const x=p(); x.appendChild(el('h2',null,'MN24 Ultimate'));
+    x.appendChild(el('p','muted','Funciones de todos los chats · un solo hub'));
+    const g=el('div','grid');
+    [['Devices','dev'],['Social','social'],['Mensajes','msg'],['MP3/MP4','media'],['Streaming','stream'],['Watch','wear'],['Cámara','cam'],['Radio','radio'],['Bluetooth','bt'],['Wi‑Fi','wifi'],['IA','ai'],['Notas','notes']].forEach(([a,v])=>{
+      const c=el('div','card'); c.innerHTML='<strong>'+a+'</strong>'; c.onclick=()=>{ST.v=v;render()}; g.appendChild(c);
+    });
+    x.appendChild(g);
+  }
+  else if(ST.v==='dev'){
+    const x=p(); x.appendChild(el('h2',null,'Devices (kit real)'));
+    DEVS.forEach(d=>{
+      const i=el('div','item'); i.appendChild(el('strong',null,d.n));
+      const r=el('span','muted',d.s); i.appendChild(r); x.appendChild(i);
+    });
+    x.appendChild(el('p','muted','Detalle: Watch/Tapo/Midland/DEP/Car en pestañas o checklist. RF = hardware.'));
+    const mid=p(); mid.appendChild(el('h2',null,'Midland checklist'));
+    mid.appendChild(el('p','muted','Canal '+ST.midCh+' · CTCSS '+ST.midCtcss+' (tu foto)'));
+    mid.appendChild(el('span','tag norf','No RF desde APK'));
+  }
+  else if(ST.v==='social'){
+    const x=p(); x.appendChild(el('h2',null,'Social'));
+    SOCIAL.forEach(([n,s])=>{const i=el('div','item');i.appendChild(el('strong',null,n));i.appendChild(el('span','tag api',s));x.appendChild(i);});
+    x.appendChild(el('h2',null,'Feed local'));
+    const feed=el('div','feed');
+    ST.posts.slice().reverse().forEach(z=>{const post=el('div','post');post.innerHTML='<b style="color:var(--c)">'+z.who+'</b> · '+ (z.when||'') +'<br>'+z.body;feed.appendChild(post);});
+    x.appendChild(feed);
+    const ta=document.createElement('textarea'); ta.rows=2; ta.placeholder='Publicar…';
+    const btn=el('button','btn','Publicar');
+    btn.onclick=()=>{const t=ta.value.trim();if(!t)return;ST.posts.push({who:'Tú',when:now(),body:t});save();ta.value='';render()};
+    x.appendChild(ta); x.appendChild(btn);
+  }
+  else if(ST.v==='msg'){
+    const x=p(); x.appendChild(el('h2',null,'Mensajería local'));
+    const chat=el('div','chat');
+    ST.msgs.forEach(z=>{const d=el('div','msg'+(z.me?' me':''));d.textContent=z.text;chat.appendChild(d);});
+    x.appendChild(chat);
+    const row=el('div','row');
+    const inp=document.createElement('input'); inp.placeholder='Mensaje…'; inp.style.flex='1';
+    const send=el('button','btn','Enviar'); send.style.width='auto';
+    send.onclick=()=>{const t=inp.value.trim();if(!t)return;ST.msgs.push({me:true,text:t});save();inp.value='';render()};
+    row.appendChild(inp); row.appendChild(send); x.appendChild(row);
+  }
+  else if(ST.v==='media'){
+    const x=p(); x.appendChild(el('h2',null,'Reproductor MP3 / MP4'));
+    x.appendChild(el('p','muted','Archivos del teléfono'));
+    const ia=document.createElement('input'); ia.type='file'; ia.accept='audio/*';
+    const au=document.createElement('audio'); au.controls=true;
+    ia.onchange=()=>{const f=ia.files&&ia.files[0];if(f)au.src=URL.createObjectURL(f)};
+    const iv=document.createElement('input'); iv.type='file'; iv.accept='video/*';
+    const vi=document.createElement('video'); vi.controls=true; vi.playsInline=true;
+    iv.onchange=()=>{const f=iv.files&&iv.files[0];if(f)vi.src=URL.createObjectURL(f)};
+    x.appendChild(el('p','muted','Audio')); x.appendChild(ia); x.appendChild(au);
+    x.appendChild(el('p','muted','Video')); x.appendChild(iv); x.appendChild(vi);
+  }
+  else if(ST.v==='stream'){
+    const x=p(); x.appendChild(el('h2',null,'Streaming'));
+    x.appendChild(el('p','muted','URL de vídeo (HTTPS) o archivo local. No es un CDN propio.'));
+    const url=document.createElement('input'); url.placeholder='https://…/video.mp4';
+    const vi=document.createElement('video'); vi.controls=true; vi.playsInline=true;
+    const btn=el('button','btn','Cargar URL');
+    btn.onclick=()=>{if(url.value.trim())vi.src=url.value.trim()};
+    const iv=document.createElement('input'); iv.type='file'; iv.accept='video/*';
+    iv.onchange=()=>{const f=iv.files&&iv.files[0];if(f)vi.src=URL.createObjectURL(f)};
+    x.appendChild(url); x.appendChild(btn); x.appendChild(el('p','muted','O archivo')); x.appendChild(iv); x.appendChild(vi);
+  }
+  else if(ST.v==='wear'){
+    const x=p(); x.appendChild(el('h2',null,'Watch companion'));
+    const met=el('div','metrics');
+    met.innerHTML='<div><strong id="clk">--:--</strong><span class="muted">Hora</span></div><div><strong>84</strong>HR</div><div><strong>0</strong>Steps</div>';
+    x.appendChild(met);
+    x.appendChild(el('p','muted','Sensores reales = app del reloj'));
+  }
+  else if(ST.v==='cam'){
+    const x=p(); x.appendChild(el('h2',null,'Cámara remota'));
+    x.appendChild(el('div','cam')).textContent='📷';
+    const g=el('div','grid');
+    ['Fotos','Demora','1p','Seguido','Apagado'].forEach(t=>{const c=el('div','card');c.innerHTML='<strong>'+t+'</strong>';g.appendChild(c);});
+    x.appendChild(g);
+  }
+  else if(ST.v==='radio'){
+    const x=p(); x.appendChild(el('h2',null,'Radio UI'));
+    x.appendChild(el('p','muted','DEP 450 PTT demo · Midland checklist'));
+    const ch=el('div','ch');
+    ['CH-1','CH-2','CH-3','CH-4'].forEach(c=>{
+      const b=document.createElement('button'); b.textContent=c; if(c===ST.ch)b.className='on';
+      b.onclick=()=>{ST.ch=c;save();render()}; ch.appendChild(b);
+    });
+    x.appendChild(ch);
+    const btn=el('button','ptt','PTT');
+    ['touchstart','mousedown'].forEach(e=>btn.addEventListener(e,ev=>{ev.preventDefault();btn.classList.add('on');btn.textContent='TX '+ST.ch}));
+    ['touchend','mouseup','mouseleave'].forEach(e=>btn.addEventListener(e,ev=>{ev.preventDefault();btn.classList.remove('on');btn.textContent='PTT'}));
+    x.appendChild(btn);
+    x.appendChild(el('span','tag norf','Sin RF desde APK'));
+  }
+  else if(ST.v==='bt'){
+    const x=p(); x.appendChild(el('h2',null,'Bluetooth demo'));
+    ['Smartwatch','DEP audio','Auriculares','Coche'].forEach(n=>{
+      const i=el('div','item'); i.appendChild(el('strong',null,n));
+      i.appendChild(el('span','tag sim','Demo')); x.appendChild(i);
+    });
+  }
+  else if(ST.v==='wifi'){
+    const x=p(); x.appendChild(el('h2',null,'Wi‑Fi'));
+    x.appendChild(el('p','muted','online='+navigator.onLine));
+    const out=el('div','log'); out.textContent='…';
+    const btn=el('button','btn','IP pública');
+    btn.onclick=async()=>{
+      if(!navigator.onLine){out.textContent='Sin red';return;}
+      try{const j=await(await fetch('https://api.ipify.org?format=json')).json();out.textContent='IP '+j.ip;}catch(e){out.textContent=e.message}
+    };
+    x.appendChild(btn); x.appendChild(out);
+    x.appendChild(el('div','log')).textContent='Termux:\npkg install termux-api\ntermux-wifi-connectioninfo';
+  }
+  else if(ST.v==='ai'){
+    const x=p(); x.appendChild(el('h2',null,'ORION local'));
+    const ta=document.createElement('textarea'); ta.rows=3; ta.placeholder='Plan / nota IA…';
+    const out=el('p','muted');
+    const btn=el('button','btn','Guardar');
+    btn.onclick=()=>{if(ta.value.trim()){out.textContent='ORION: '+ta.value.trim();ST.msgs.push({me:true,text:'[IA] '+ta.value.trim()});save();}};
+    x.appendChild(ta); x.appendChild(btn); x.appendChild(out);
+  }
+  else if(ST.v==='notes'){
+    const x=p(); x.appendChild(el('h2',null,'Notas'));
+    const ta=document.createElement('textarea'); ta.rows=8; ta.value=ST.notes||'';
+    const btn=el('button','btn','Guardar');
+    btn.onclick=()=>{ST.notes=ta.value;save();};
+    x.appendChild(ta); x.appendChild(btn);
+  }
+  else if(ST.v==='status'){
+    const x=p(); x.appendChild(el('h2',null,'Estado'));
+    [['Feed + chat + notas','ok'],['MP3/MP4 + stream local','ok'],['Watch / cam / radio UI','ok'],['Devices checklist','ok'],['BT lista','sim'],['OAuth redes','api'],['RF Midland/DEP','norf']].forEach(([a,k])=>{
+      const i=el('div','item'); i.appendChild(el('strong',null,a)); i.appendChild(el('span','tag '+k,k)); x.appendChild(i);
+    });
+  }
+}
+$('tabs').onclick=e=>{const b=e.target.closest('[data-v]');if(!b)return;ST.v=b.dataset.v;render()};
+render();
+setInterval(()=>{const c=$('clk');if(c)c.textContent=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})},1000);
+</script>
+</body>
+</html>
